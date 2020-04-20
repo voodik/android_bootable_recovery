@@ -54,6 +54,7 @@
 #include "edify/expr.h"
 #include "otafault/ota_io.h"
 #include "otautil/cache_location.h"
+#include "otautil/DirUtil.h"
 #include "otautil/error_code.h"
 #include "otautil/print_sha1.h"
 #include "otautil/rangeset.h"
@@ -913,7 +914,7 @@ static int CreateStash(State* state, size_t maxblocks, const std::string& blockd
     return -1;
   } else if (res != 0) {
     LOG(INFO) << "creating stash " << dirname;
-    res = mkdir(dirname.c_str(), STASH_DIRECTORY_MODE);
+    res = mkdir_recursively(dirname, STASH_DIRECTORY_MODE, false, nullptr);
 
     if (res != 0) {
       ErrorAbort(state, kStashCreationFailure, "mkdir \"%s\" failed: %s", dirname.c_str(),
